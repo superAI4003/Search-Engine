@@ -3,7 +3,7 @@ import requests
 
 class GoogleSearch(BaseSearchEngine):
     def __init__(self, api_key, cx):
-        self.api_key = api_key
+        self.api_key = "AIzaSyCnSusKfmNfvdQ-GRHShYhtapHKdNWKMtg"
         self.cx = cx
         self.url = "https://www.googleapis.com/customsearch/v1"
 

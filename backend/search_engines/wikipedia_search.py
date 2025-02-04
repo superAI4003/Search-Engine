@@ -9,7 +9,7 @@ class WikipediaSearch(BaseSearchEngine):
         params = {
             "action": "opensearch",
             "search": query,
-            "limit": "5",
+            "limit": "10",
             "namespace": "0",
             "format": "json"
         }
