@@ -8,16 +8,6 @@ router = APIRouter()
 
 @router.get("/search")
 async def search(query: str):
-    # Perform searches
-    # bing_results = bing.search(query)
-    # google_results = google.search(query)
-    wikipedia = WikipediaSearch()
-    wikipedia_results = wikipedia.search(query)
-    
-    # Process results with LLMs
-    # llm_processor = LLMProcessor()
-    # llm_processor.process(bing_results)
-    # llm_processor.process(google_results)
-    # llm_processor.process(wikipedia_results)
-    
-    return {"wikipedia_results": wikipedia_results}
+    googleSearch = GoogleSearch()
+    google_results = googleSearch.search(query)
+    return {"google_results":  str(google_results)}
