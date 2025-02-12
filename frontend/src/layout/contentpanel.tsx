@@ -2,14 +2,13 @@ import { useModel } from "@/context/ModelContext";
 import { useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 import ReactLoading from "react-loading";
+import { AiFillLike } from "react-icons/ai";
 
 function ContentPanel() {
   const [isGenerating, setIsGenerating] = useState(false);
   const { prompt, selectedModel } = useModel();
   const [query, setQuery] = useState("");
-  const [conversationResults, setConversationResults] = useState<
-    { modelID: string; content: string }[]
-  >([]);
+  const {conversationResults, setConversationResults} = useModel();
 
   const handleSearch = async () => {
     try {
@@ -40,7 +39,7 @@ function ContentPanel() {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              model_id: modelID,
+              llm_id: modelID,
               prompt: `${prompt}${search_content}`,
             }),
           }
@@ -51,7 +50,8 @@ function ContentPanel() {
         }
         const data = await response.json();
         const content = data.choices[0].message.content;
-        const result = { modelID, content };
+        const vote = false;
+        const result = { modelID, content,vote, query,search_content };
         results.push(result);
         setConversationResults((prevResults) => [...prevResults, result]);
       }
@@ -59,7 +59,10 @@ function ContentPanel() {
     } catch (error) {
       console.error("Error fetching conversation data:", error);
       return error;
+    }finally{
+      setQuery("");
     }
+
   };
 
   const handleGenerating = async () => {
@@ -73,14 +76,28 @@ function ContentPanel() {
       <div className="w-full h-[800px] flex  justify-around  ">
         {conversationResults.length > 0 &&
           conversationResults.map((result) => (
-            <div className="w-[32%] flex flex-col overflow-y-auto border rounded-md border-gray-400 shadow-md overflow-hidden">
+            <div className="w-[32%] flex flex-col overflow-y-auto border rounded-md border-gray-400 shadow-md overflow-hidden hover:cursor-pointer hover:bg-gray-100"
+            onClick={() => {
+              setConversationResults((prevResults) =>
+                prevResults.map((r) =>
+                  r.modelID === result.modelID
+                    ? { ...r, vote: !r.vote }
+                    : r
+                )
+              );
+            }}
+            >
               <div className="bg-gray-800 text-white py-2 text-center px-4">
                 <p className="text-left"><span className="font-bold">Model:</span> {result.modelID}</p>
-                <p className="text-left"><span className="font-bold">Query:</span> {query}</p>
+                <p className="text-left"><span className="font-bold">Query:</span> {result.query}</p>
               </div>
+              {result.vote &&<div className="flex justify-center p-2">
+                <AiFillLike size={20} className="text-gray-600 hover:text-gray-800 cursor-pointer" />
+              </div>}
               <p className="p-2 whitespace-pre-wrap">
-              {result.content}
+                {result.content}
               </p>
+              
             </div>
           ))}
       </div>

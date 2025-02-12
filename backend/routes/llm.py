@@ -3,7 +3,7 @@ from llm_integration.llm_processor import LLMProcessor
 from pydantic import BaseModel
 
 class ConversationRequest(BaseModel):
-    model_id: str
+    llm_id: str
     prompt: str
 router = APIRouter()
 
@@ -16,7 +16,7 @@ async def get_model_data():
 
 @router.post("/conversation")
 async def conversation(request: ConversationRequest):
-    models_json = await llm_processor.chat_completions(request.model_id, request.prompt)
+    models_json = await llm_processor.chat_completions(request.llm_id, request.prompt)
     return models_json
 
 @router.get("/get_credits")
