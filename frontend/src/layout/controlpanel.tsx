@@ -45,7 +45,7 @@ function ControlPanel() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                 "llm_id": result.modelID,
+                  "llm_id": result.modelID,
                   "query": result.query ,
                   "search_result": result.search_content,
                   "llm_out":result.content ,

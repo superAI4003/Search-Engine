@@ -49,9 +49,15 @@ function ContentPanel() {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        const content = data.choices[0].message.content;
+        let content = "";
+        if (data.choices && data.choices.length > 0) {
+          content = data.choices[0].message.content;
+        } else {
+          console.error("Unexpected response structure:", data);
+          content = "No content available";
+        }
         const vote = false;
-        const result = { modelID, content,vote, query,search_content };
+        const result = { modelID, content, vote, query, search_content };
         results.push(result);
         setConversationResults((prevResults) => [...prevResults, result]);
       }
@@ -75,8 +81,9 @@ function ContentPanel() {
     <div className="w-full h-full bg-[#ffffff] rounded-t-lg shadow-lg relative">
       <div className="w-full h-[800px] flex  justify-around  ">
         {conversationResults.length > 0 &&
-          conversationResults.map((result) => (
+          conversationResults.map((result,index) => (
             <div className="w-[32%] flex flex-col overflow-y-auto border rounded-md border-gray-400 shadow-md overflow-hidden hover:cursor-pointer hover:bg-gray-100"
+            key={index}
             onClick={() => {
               setConversationResults((prevResults) =>
                 prevResults.map((r) =>
