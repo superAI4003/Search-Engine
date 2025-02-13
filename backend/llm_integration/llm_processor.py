@@ -17,10 +17,12 @@ class LLMProcessor:
         return None  # Return None if the model_id is not found
 
     async def chat_completions(self, model_id="google/gemini-2.0-flash-thinking-exp:free", prompt="Hi"):
-        json_file_path = 'llm_integration/modelinfo.json'
-        context_length = self.get_context_length(model_id, json_file_path)
-        if len(prompt) > context_length:
-            prompt = prompt[:context_length]
+        # json_file_path = 'llm_integration/modelinfo.json'
+        # context_length = self.get_context_length(model_id, json_file_path)
+        
+        # if len(prompt) > context_length:
+        #     prompt = prompt[:context_length]
+
         url = "https://openrouter.ai/api/v1/chat/completions"
         api_key = os.getenv("OPENROUTER_API_KEY")
         headers = {
